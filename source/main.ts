@@ -1,24 +1,21 @@
 import './utils/moduleAlias';
 
 import express from 'express';
-// import { Loader } from '@/loaders';
-// import router from '@/api';
+import { Loader } from '@/loaders';
+import router from '@/api';
 import logger from '@/utils/logger';
 import CONFIG from '@/config';
 
-async function startServer(): Promise<void> {
+function startServer(): void {
     logger.hr();
     logger.warning('CAMUFLON API');
 
     const app = express();
 
-    // const loader = new Loader(app, router);
-    // loader.loadMiddlewares();
-    // loader.loadRouter();
-    // loader.loadErrorHandler();
-    // loader.loadSubscribers();
-    // await loader.loadJobs();
-    // await loader.testDatabaseConnection();
+    const loader = new Loader(app, router);
+    loader.loadMiddlewares();
+    loader.loadRouter();
+    loader.loadErrorHandler();
 
     logger.info('Starting server...');
     const port = CONFIG.SERVER.PORT;
