@@ -39,7 +39,7 @@ export const authenticateLocal: Handler = function authenticate(req, res, next) 
 
 export function initializePassport(): Handler {
     passport.use(
-        new LocalStrategy((identifier, password, done) => {
+        new LocalStrategy({ usernameField: 'identifier' }, (identifier, password, done) => {
             async function authenticate() {
                 const company = await authService.verifyCredentials(identifier, password);
                 return company;
