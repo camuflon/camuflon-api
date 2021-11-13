@@ -1,6 +1,6 @@
 import { ObjectId } from 'mongodb';
 
-export interface Statistics {
+export interface Statistic {
     _id: ObjectId;
     companyId: ObjectId;
     locationId: ObjectId;

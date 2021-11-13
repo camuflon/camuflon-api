@@ -1,16 +1,17 @@
 import { Router } from 'express';
 
 import asyncHandler from '@/utils/asyncHandler';
-import usersService from '@/services/users.service';
+import statisticsService from '@/services/statistics.service';
 
 export default function (): Router {
-    const router = Router();
+    const router = Router({ mergeParams: true });
 
-    router.put(
+    router.post(
         '/',
         asyncHandler(async (req, res) => {
+            const cid = req.params.cid;
             const body = req.body;
-            const response = await usersService.putUser(body);
+            const response = await statisticsService.postStatistic(cid, body);
             res.json(response);
         })
     );
