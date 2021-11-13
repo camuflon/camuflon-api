@@ -2,23 +2,18 @@ import { Router } from 'express';
 
 import { authenticateJwt } from '@/utils/auth';
 import asyncHandler from '@/utils/asyncHandler';
+import authService from '@/services/auth.service';
 import companyService from '@/services/company.service';
 
-import { UserNotAuthorizedError } from '@/errors';
 import { Company } from '@/types';
 
 export default function (): Router {
     const router = Router();
 
-    router.get('/:id', authenticateJwt, (req, res) => {
-        const id = req.params.id;
+    router.get('/me', authenticateJwt, (req, res) => {
         const company = req.user as Company;
-
-        if (company._id.toHexString() !== id) {
-            throw new UserNotAuthorizedError();
-        }
-
-        res.json(company);
+        const response = authService.generateAuthResponse(company);
+        res.json(response);
     });
 
     router.post(
