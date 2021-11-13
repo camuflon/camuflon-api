@@ -26,6 +26,22 @@ export class LocationService {
         .required()
         .options({ presence: 'optional' });
 
+    public async getLocations(cid: string): Promise<Location[]> {
+        const parsedCid = validateMongoId(cid);
+
+        const locations = await dbQuery<Location[]>(async db => {
+            const companyExists = await db.collection('companies').countDocuments({ _id: parsedCid });
+            if (!companyExists) {
+                throw new InvalidIdError('Company does not exist');
+            }
+
+            const locations = await db.collection<Location>('locations').find({ companyId: parsedCid }).toArray();
+            return locations;
+        });
+
+        return locations;
+    }
+
     public async postLocation(cid: string, body: any): Promise<string> {
         const parsedCid = validateMongoId(cid);
         const parsedLocation = validateBody<LocationCreateBody>(this.postValidator, body);

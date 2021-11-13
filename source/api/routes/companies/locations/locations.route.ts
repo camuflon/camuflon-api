@@ -6,6 +6,15 @@ import locationService from '@/services/location.service';
 export default function (): Router {
     const router = Router({ mergeParams: true });
 
+    router.get(
+        '/',
+        asyncHandler(async (req, res) => {
+            const cid = req.params.cid;
+            const response = await locationService.getLocations(cid);
+            res.json(response);
+        })
+    );
+
     router.post(
         '/',
         asyncHandler(async (req, res) => {
