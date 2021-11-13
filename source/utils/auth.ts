@@ -13,7 +13,7 @@ export const authenticateJwt: Handler = function authenticate(req, res, next) {
         return next();
     }
 
-    passport.authenticate('jwt', function (_error, user, info) {
+    passport.authenticate('jwt', { session: false }, function (_error, user, info) {
         if (info) {
             logger.warning('Error in jwt authentication', info);
             const error = new UserNotAuthenticatedError();
@@ -27,7 +27,7 @@ export const authenticateJwt: Handler = function authenticate(req, res, next) {
 };
 
 export const authenticateLocal: Handler = function authenticate(req, res, next) {
-    passport.authenticate('local', function (err, user, _info) {
+    passport.authenticate('local', { session: false }, function (err, user, _info) {
         if (err) {
             const error = new InvalidCredentialsError();
             next(error);
