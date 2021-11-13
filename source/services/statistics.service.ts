@@ -40,7 +40,6 @@ export class StatisticService {
     }
 
     public async postStatistic(cid: string, body: any): Promise<StatisticsPostResponse> {
-        console.log(body);
         const parsedCid = validateMongoId(cid);
         const parsedBody = validateBody<StatisticsPostBody>(this.postValidator, body);
 
