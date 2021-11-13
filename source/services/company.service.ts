@@ -5,7 +5,7 @@ import { v4 as uuid } from 'uuid';
 import { dbQuery, ObjectId } from '@/services/db.service';
 import authService, { AuthResponse } from '@/services/auth.service';
 
-import { validateBody } from '@/utils/validation';
+import { validateBody, validateMongoId } from '@/utils/validation';
 
 import { Company } from '@/types';
 
@@ -13,6 +13,7 @@ import CONFIG from '@/config';
 import { InvalidBodyError } from '@/errors';
 
 type CompanyCreateBody = Pick<Company, 'name' | 'email' | 'password'>;
+type CompanyEditBody = Pick<Company, 'name' | 'email' | 'beaconsUUID'>;
 
 export class CompanyService {
     protected readonly postValidator = Joi.object({
@@ -24,6 +25,16 @@ export class CompanyService {
     })
         .required()
         .options({ presence: 'required' });
+
+    protected readonly patchValidator = Joi.object({
+        name: Joi.string()
+            .min(1)
+            .regex(/^[\w.]+$/),
+        email: Joi.string().email(),
+        beaconsUUID: Joi.string().min(1)
+    })
+        .required()
+        .options({ presence: 'optional' });
 
     private hashPassword(password: string): string {
         return bcrypt.hashSync(password, CONFIG.SECURITY.SALT_ROUNDS);
@@ -59,6 +70,32 @@ export class CompanyService {
         return authService.generateAuthResponse({
             ...company,
             _id: id
+        });
+    }
+
+    public async patchCompany(id: string, body: any): Promise<void> {
+        const parsedId = validateMongoId(id);
+        const parsedBody = validateBody<CompanyEditBody>(this.patchValidator, body);
+
+        await dbQuery(async db => {
+            const alreadyExists = await db.collection('companies').countDocuments({
+                $or: [
+                    { email: parsedBody.email, _id: { $ne: parsedId } },
+                    { name: parsedBody.name, _id: { $ne: parsedId } }
+                ]
+            });
+
+            if (alreadyExists) {
+                throw new InvalidBodyError(
+                    'Company already exists',
+                    'There is already another company with this name or email'
+                );
+            }
+
+            const result = await db.collection<Company>('companies').updateOne({ _id: parsedId }, { $set: parsedBody });
+            if (!result.matchedCount) {
+                throw new Error('Error in updating the company on the db');
+            }
         });
     }
 }

@@ -15,5 +15,15 @@ export default function (): Router {
         })
     );
 
+    router.patch(
+        '/:id',
+        asyncHandler(async (req, res) => {
+            const id = req.params.id;
+            const body = req.body;
+            await companyService.patchCompany(id, body);
+            res.json();
+        })
+    );
+
     return router;
 }
