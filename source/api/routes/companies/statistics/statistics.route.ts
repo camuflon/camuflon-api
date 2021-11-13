@@ -9,6 +9,7 @@ export default function (): Router {
 
     router.get(
         '/',
+        authenticateJwt,
         asyncHandler(async (req, res) => {
             const cid = req.params.cid;
             const statistics = await statisticsService.getStatistics(cid);
@@ -18,7 +19,6 @@ export default function (): Router {
 
     router.post(
         '/',
-        authenticateJwt,
         asyncHandler(async (req, res) => {
             const cid = req.params.cid;
             const body = req.body;
