@@ -4,6 +4,7 @@
   "description": "The api of the camuflon project",
   "main": "dist/main.js",
   "scripts": {
+    "postinstall": "npm run transpile",
     "pretranspile": "shx rm -rf dist",
     "transpile": "tsc -p source",
     "start": "node dist/main",
