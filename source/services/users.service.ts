@@ -13,6 +13,7 @@ interface UsersPutBody {
 }
 interface UsersPutResponse {
     companyId: string;
+    companyName: string;
     beaconsUUID: string;
     userId: string;
 }
@@ -67,7 +68,8 @@ export class UsersService {
             return {
                 userId: user._id.toHexString(),
                 beaconsUUID: company.beaconsUUID,
-                companyId: company._id.toHexString()
+                companyId: company._id.toHexString(),
+                companyName: company.name
             };
         });
 
