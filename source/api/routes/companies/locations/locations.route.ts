@@ -1,19 +1,17 @@
 import { Router } from 'express';
 
 import asyncHandler from '@/utils/asyncHandler';
-import { authenticateJwt } from '@/utils/auth';
-import companyService from '@/services/company.service';
-
-import locationsRouter from './locations/locations.route';
+import locationService from '@/services/location.service';
 
 export default function (): Router {
-    const router = Router();
+    const router = Router({ mergeParams: true });
 
     router.post(
         '/',
         asyncHandler(async (req, res) => {
+            const cid = req.params.cid;
             const body = req.body;
-            const response = await companyService.postCompany(body);
+            const response = await locationService.postLocation(cid, body);
             res.json(response);
         })
     );
@@ -21,13 +19,13 @@ export default function (): Router {
     router.patch(
         '/:id',
         asyncHandler(async (req, res) => {
+            const cid = req.params.cid;
             const id = req.params.id;
             const body = req.body;
-            await companyService.patchCompany(id, body);
+            await locationService.patchLocation(cid, id, body);
             res.json();
         })
     );
 
-    router.use('/:cid/locations', authenticateJwt, locationsRouter());
     return router;
 }
