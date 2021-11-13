@@ -6,6 +6,15 @@ import statisticsService from '@/services/statistics.service';
 export default function (): Router {
     const router = Router({ mergeParams: true });
 
+    router.get(
+        '/',
+        asyncHandler(async (req, res) => {
+            const cid = req.params.cid;
+            const statistics = await statisticsService.getStatistics(cid);
+            res.json(statistics);
+        })
+    );
+
     router.post(
         '/',
         asyncHandler(async (req, res) => {

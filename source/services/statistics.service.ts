@@ -27,6 +27,20 @@ export class StatisticService {
         .required()
         .options({ presence: 'required' });
 
+    public async getStatistics(cid: string): Promise<Statistic[]> {
+        const parsedCid = validateMongoId(cid);
+
+        const statistics = await dbQuery<Statistic[]>(async db => {
+            const company = await db.collection<Company>('companies').findOne({ _id: parsedCid });
+            if (!company) {
+                throw new InvalidBodyError('Company not found');
+            }
+            return db.collection<Statistic>('statistics').find({ companyId: parsedCid }).toArray();
+        });
+
+        return statistics;
+    }
+
     public async postStatistic(cid: string, body: any): Promise<StatisticsPostResponse> {
         const parsedCid = validateMongoId(cid);
         const parsedBody = validateBody<StatisticsPostBody>(this.postValidator, body);
