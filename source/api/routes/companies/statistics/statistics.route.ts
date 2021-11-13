@@ -1,6 +1,7 @@
 import { Router } from 'express';
 
 import asyncHandler from '@/utils/asyncHandler';
+import { authenticateJwt } from '@/utils/auth';
 import statisticsService from '@/services/statistics.service';
 
 export default function (): Router {
@@ -17,6 +18,7 @@ export default function (): Router {
 
     router.post(
         '/',
+        authenticateJwt,
         asyncHandler(async (req, res) => {
             const cid = req.params.cid;
             const body = req.body;
