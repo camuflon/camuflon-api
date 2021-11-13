@@ -4,16 +4,18 @@ import { v4 as uuid } from 'uuid';
 
 import { dbQuery, ObjectId } from '@/services/db.service';
 import authService, { AuthResponse } from '@/services/auth.service';
+import emailService from '@/services/email.service';
 
 import { validateBody, validateMongoId } from '@/utils/validation';
+import logger from '@/utils/logger';
 
 import { Company } from '@/types';
-
-import CONFIG from '@/config';
 import { InvalidBodyError } from '@/errors';
 
+import CONFIG from '@/config';
+
 type CompanyCreateBody = Pick<Company, 'name' | 'email' | 'password'>;
-type CompanyEditBody = Pick<Company, 'name' | 'email' | 'beaconsUUID'>;
+type CompanyEditBody = Pick<Company, 'name' | 'email'>;
 
 export class CompanyService {
     protected readonly postValidator = Joi.object({
@@ -30,8 +32,7 @@ export class CompanyService {
         name: Joi.string()
             .min(1)
             .regex(/^[\w.]+$/),
-        email: Joi.string().email(),
-        beaconsUUID: Joi.string().min(1)
+        email: Joi.string().email()
     })
         .required()
         .options({ presence: 'optional' });
@@ -66,6 +67,11 @@ export class CompanyService {
             const result = await db.collection<Company>('companies').insertOne(company);
             return result.insertedId;
         });
+
+        emailService
+            .newUser(company as any)
+            .then(() => logger.info('Email sent'))
+            .catch(error => logger.error(error));
 
         return authService.generateAuthResponse({
             ...company,

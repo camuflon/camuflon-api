@@ -8,20 +8,18 @@ import { Location } from '@/types';
 
 import { InvalidIdError } from '@/errors';
 
-type LocationCreateBody = Pick<Location, 'name' | 'beaconsMajor'>;
+type LocationCreateBody = Pick<Location, 'name'>;
 type LocationEditBody = LocationCreateBody;
 
 export class LocationService {
     protected readonly postValidator = Joi.object({
-        name: Joi.string().min(1),
-        beaconsMajor: Joi.string().min(1)
+        name: Joi.string().min(1)
     })
         .required()
         .options({ presence: 'required' });
 
     protected readonly patchValidator = Joi.object({
-        name: Joi.string().min(1),
-        beaconsMajor: Joi.string().min(1)
+        name: Joi.string().min(1)
     })
         .required()
         .options({ presence: 'optional' });

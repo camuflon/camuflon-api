@@ -5,6 +5,7 @@ import { authenticateJwt } from '@/utils/auth';
 import companyService from '@/services/company.service';
 
 import locationsRouter from './locations/locations.route';
+import beaconsRouter from './beacons/beacons.route';
 import statisticsRouter from './statistics/statistics.route';
 
 export default function (): Router {
@@ -30,6 +31,7 @@ export default function (): Router {
     );
 
     router.use('/:cid/locations', authenticateJwt, locationsRouter());
+    router.use('/:cid/beacons', authenticateJwt, beaconsRouter());
     router.use('/:cid/statistics', statisticsRouter());
 
     return router;

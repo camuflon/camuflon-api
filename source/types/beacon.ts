@@ -1,10 +1,8 @@
 import { ObjectId } from 'mongodb';
 
-export interface Statistic {
+export interface Beacon {
     _id: ObjectId;
     companyId: ObjectId;
     locationId: ObjectId;
-    userId: ObjectId;
-    timestamp: Date;
-    beaconId: ObjectId;
+    beaconId: string;
 }

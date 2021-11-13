@@ -14,7 +14,6 @@ interface UsersPutBody {
 interface UsersPutResponse {
     companyId: string;
     companyName: string;
-    beaconsUUID: string;
     userId: string;
 }
 interface UsersGetBody {
@@ -49,9 +48,6 @@ export class UsersService {
             if (!company) {
                 throw new InvalidBodyError('Company not found', 'There is not a company with this name');
             }
-            if (!company.beaconsUUID) {
-                throw new InvalidBodyError('Company has not bacons uuid', 'This company has not beacons uuid');
-            }
             if (company.token !== parsedBody.token) {
                 throw new InvalidTokenError('Invalid token');
             }
@@ -78,7 +74,6 @@ export class UsersService {
 
             return {
                 userId: user._id.toHexString(),
-                beaconsUUID: company.beaconsUUID,
                 companyId: company._id.toHexString(),
                 companyName: company.name
             };

@@ -11,7 +11,7 @@ import CONFIG from '@/config';
 
 export interface AuthResponse {
     token: string;
-    company: Pick<Company, 'name' | 'email' | 'beaconsUUID' | 'token'> & { _id: string };
+    company: Pick<Company, 'name' | 'email' | 'token'> & { _id: string };
 }
 export class AuthService {
     private readonly jwtAlgorithm: string;
@@ -88,7 +88,6 @@ export class AuthService {
                 _id: company._id.toHexString(),
                 name: company.name,
                 email: company.email,
-                beaconsUUID: company.beaconsUUID,
                 token: company.token
             }
         };

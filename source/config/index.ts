@@ -43,6 +43,16 @@ const CONFIG = {
             ISSUER: process.env.SECURITY_JWT_ISSUER
         }
     },
+    EMAIL: {
+        TYPE: process.env.EMAIL_TYPE,
+        USER: process.env.EMAIL_USER,
+        CLIENT_ID: process.env.EMAIL_CLIENT_ID,
+        CLIENT_SECRET: process.env.EMAIL_CLIENT_SECRET,
+        REFRESH_TOKEN: process.env.EMAIL_REFRESH_TOKEN,
+        ACCESS_TOKEN: process.env.EMAIL_ACCESS_TOKEN,
+        EXPIRES: process.env.EMAIL_EXPIRES,
+        TEMPLATES_PATH: getPath(process.env.EMAIL_TEMPLATES_PATH)
+    },
     LOGGER: {
         DEBUG: process.env.LOGGER_DEBUG === 'true'
     },
