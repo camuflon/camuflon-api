@@ -21,7 +21,7 @@ export class UsersService {
     protected readonly putValidator = Joi.object({
         companyName: Joi.string().regex(/^[\w.]+$/),
         token: Joi.string().uuid(),
-        userId: Joi.string().min(1).allow(null).optional().default(null)
+        userId: Joi.string().length(24).allow(null).optional().default(null)
     })
         .required()
         .options({ presence: 'required' });
