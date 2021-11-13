@@ -9,7 +9,7 @@ import { Company } from '@/types';
 
 import CONFIG from '@/config';
 
-interface AuthResponse {
+export interface AuthResponse {
     token: string;
     company: Pick<Company, 'name' | 'email' | 'beaconsUUID' | 'token'> & { _id: string };
 }
