@@ -60,14 +60,14 @@ export class StatisticService {
 
             const beacon: Beacon | null = await db
                 .collection<Beacon>('beacons')
-                .findOne({ minor: parsedBody.beaconId });
+                .findOne({ beaconId: parsedBody.beaconId });
             if (!beacon) {
                 throw new InvalidBodyError('Beacon not found', 'There is not a beacon with this minor');
             }
 
             const location: Location | null = await db.collection<Location>('locations').findOne({
                 companyId: new ObjectId(parsedCid),
-                beaconId: new ObjectId(beacon._id)
+                _id: new ObjectId(beacon.locationId)
             });
             if (!location) {
                 throw new InvalidBodyError(

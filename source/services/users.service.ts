@@ -24,7 +24,7 @@ interface UsersGetBody {
 export class UsersService {
     protected readonly putValidator = Joi.object({
         companyName: Joi.string().regex(/^[\w.]+$/),
-        token: Joi.string().uuid(),
+        token: Joi.string().min(1),
         userId: Joi.string().length(24).allow(null).optional().default(null)
     })
         .required()
