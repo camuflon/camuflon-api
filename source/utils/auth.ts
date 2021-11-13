@@ -19,9 +19,8 @@ export const authenticateJwt: Handler = function authenticate(req, res, next) {
             const error = new UserNotAuthenticatedError();
             next(error);
         } else {
-            req.login(user, err => {
-                next(err);
-            });
+            req.user = user;
+            next();
         }
     })(req, res, next);
 };
@@ -32,9 +31,8 @@ export const authenticateLocal: Handler = function authenticate(req, res, next) 
             const error = new InvalidCredentialsError();
             next(error);
         } else {
-            req.login(user, err => {
-                next(err);
-            });
+            req.user = user;
+            next();
         }
     })(req, res, next);
 };
