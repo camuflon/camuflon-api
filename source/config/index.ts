@@ -24,7 +24,7 @@ function fileContent(path: string): string {
 const CONFIG = {
     NODE_ENV: process.env.NODE_ENV || 'development',
     SERVER: {
-        PORT: process.env.SERVER_PORT || 3000,
+        PORT: process.env.PORT || process.env.SERVER_PORT || 3000,
         URL: process.env.SERVER_URL
     },
     MONGO: {
