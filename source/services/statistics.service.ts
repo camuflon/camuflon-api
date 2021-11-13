@@ -22,7 +22,7 @@ export class StatisticService {
         userId: Joi.string().length(24),
         beaconMajor: Joi.string().min(1),
         beaconMinor: Joi.string().min(1),
-        timestamp: Joi.date().iso().max(new Date())
+        timestamp: Joi.date().iso()
     })
         .required()
         .options({ presence: 'required' });
