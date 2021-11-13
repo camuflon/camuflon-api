@@ -15,5 +15,15 @@ export default function (): Router {
         })
     );
 
+    router.get(
+        '/:id/statistics',
+        asyncHandler(async (req, res) => {
+            const id = req.params.id;
+            const body = req.body;
+            const response = await usersService.getStatistics(id, body);
+            res.json(response);
+        })
+    );
+
     return router;
 }
