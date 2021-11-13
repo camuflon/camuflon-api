@@ -1,7 +1,7 @@
 FROM node:lts-alpine
 WORKDIR /server
 COPY package*.json ./
-RUN npm install
+RUN npm install --ignore-scripts
 COPY . .
 RUN npm run transpile && \
     rm -r source node_modules
